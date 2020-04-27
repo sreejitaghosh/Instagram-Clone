@@ -19,6 +19,8 @@ class MainPage(webapp2.RequestHandler):
 
         url_string = ''
         url = ''
+        collection = []
+        Caption = []
 
         user = users.get_current_user()
 
@@ -30,8 +32,20 @@ class MainPage(webapp2.RequestHandler):
             if myuser == None:
                 myuser = MyUser(id=user.email())
                 myuser.email_address = user.email()
+                myuser.userId = user.nickname()
                 welcome = 'Welcome to the application'
                 myuser.put()
+
+            collection_key = ndb.Key('post',user.nickname())
+            collection_key = collection_key.get()
+            i = 0
+            if collection_key != None:
+                i = len(collection_key.photo_url) - 1
+                while i > -1:
+                    collection.append(collection_key.photo_url[i])
+                    Caption.append(collection_key.caption[i])
+                    i = i - 1
+                i = len(collection_key.photo_url) - 1
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'
@@ -39,13 +53,16 @@ class MainPage(webapp2.RequestHandler):
         template_values = {
              'url' : url,
              'url_string' : url_string,
-             'user' : user
+             'user' : user,
+             'collection' : collection,
+             'Caption' : Caption,
+             'i': i
         }
 
         template = JINJA_ENVIRONMENT.get_template('login-logout.html')
         self.response.write(template.render(template_values))
 
 app = webapp2.WSGIApplication([
+('/photocomment',photocomment),
     ('/',MainPage),
-    ('/photocomment',photocomment)
 ], debug=True)

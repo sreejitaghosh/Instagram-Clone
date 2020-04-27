@@ -30,7 +30,7 @@
         {% if user %}
         <li class="active"><a href="/">Home</a></li>
         <li><a href="/photocomment">+ Create Post</a></li>
-        <form class="navbar-form navbar-right" action="/action_page.php">
+        <form class="navbar-form navbar-right" action="post">
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Search" name="search">
           <div class="input-group-btn">
@@ -40,6 +40,8 @@
           </div>
         </div>
         </form>
+        <li><a href="#">Follower</a></li>
+        <li><a href="#">Following</a></li>
         {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -49,7 +51,13 @@
     </nav>
     <div class="container">
       {% if user %}
-      <p>Welcome {{ welcome }} {{ user.email() }}</p>
+      <p>USER: {{ welcome }} {{ user.email() }}</p>
+      {% for j in range(0,i+1) %}
+        <img src="{{ collection[j] }}" style="width:200px;height:300px;">
+        <br>
+        Caption (if available) : {{ Caption[j] }}
+        <hr>
+      {% endfor%}
       {% else %}
       <p>Welcome to the application </p>
       {% endif %}
