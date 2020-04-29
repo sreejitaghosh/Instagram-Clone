@@ -7,6 +7,7 @@ from user import MyUser
 from post import post
 from followerfollowing import followerfollowing
 from photocomment import photocomment
+from search import search
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -21,6 +22,9 @@ class MainPage(webapp2.RequestHandler):
         url = ''
         collection = []
         Caption = []
+        length = 0
+        userfollower = 0
+        userfollowing = 0
 
         user = users.get_current_user()
 
@@ -38,14 +42,17 @@ class MainPage(webapp2.RequestHandler):
 
             collection_key = ndb.Key('post',user.nickname())
             collection_key = collection_key.get()
-            i = 0
             if collection_key != None:
                 i = len(collection_key.photo_url) - 1
                 while i > -1:
                     collection.append(collection_key.photo_url[i])
                     Caption.append(collection_key.caption[i])
                     i = i - 1
-                i = len(collection_key.photo_url) - 1
+                length = len(collection)
+            collect = ndb.Key('followerfollowing',user.nickname()).get()
+            if collect != None:
+                userfollower = len(user.follower)
+                userfollowing = len(user.following)
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'
@@ -56,7 +63,9 @@ class MainPage(webapp2.RequestHandler):
              'user' : user,
              'collection' : collection,
              'Caption' : Caption,
-             'i': i
+             'i' : length,
+             'userfollower': userfollower,
+             'userfollowing': userfollowing,
         }
 
         template = JINJA_ENVIRONMENT.get_template('login-logout.html')
@@ -64,5 +73,6 @@ class MainPage(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
 ('/photocomment',photocomment),
+('/search',search),
     ('/',MainPage),
 ], debug=True)
