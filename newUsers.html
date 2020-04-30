@@ -40,6 +40,8 @@
             </div>
           </div>
         </form>
+        <li><a href="/follower"><b><u>{{ userfollower }}</u></b> Follower</a></li>
+        <li><a href="/following"><b><u>{{ userfollowing }}</u></b> Following</a></li>
       {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -50,16 +52,29 @@
     <div class="container">
       {% if user %}
       <p>USER: {{ welcome }} {{ user.email() }}</p>
+      <hr>
+      <p> Other User: {{ newEmail }}
+        <li><a href="/follower"><b><u>{{ userfollower }}</u></b> Follower</a></li>
+        <li><a href="/following"><b><u>{{ userfollowing }}</u></b> Following</a></li>
+        {% if followDecission == 'False' %}
+          <form action='/newUsers?email_address={{ newEmail }}' method='post'>
+            <input type="submit" name="submit" value="Follow">
+          </form>
+        {% elif followDecission == 'True' %}
+            <form action='/newUsers?email_address={{ newEmail }}' method='post'>
+            <input type="submit" name="submit" value="Unfollow">
+            </form>
+        {% endif %}
+        {% for j in range(0,i) %}
+          <img src="{{ collection[j] }}" style="width:200px;height:300px;">
+          <br>
+          Caption (if available) : {{ Caption[j] }}
+          <hr>
+        {% endfor%}
       {% else %}
       <p>Welcome to the application </p>
       {% endif %}
       <br>
-      {% for value in Result %}
-      <a href="/newUsers?email_address={{ value }}">
-        User: {{ value }}
-      </a>
-      <br>
-      {% endfor %}
     </div>
   </center>
 </body>

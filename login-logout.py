@@ -8,6 +8,7 @@ from post import post
 from followerfollowing import followerfollowing
 from photocomment import photocomment
 from search import search
+from newUsers import newUsers
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -51,8 +52,8 @@ class MainPage(webapp2.RequestHandler):
                 length = len(collection)
             collect = ndb.Key('followerfollowing',user.nickname()).get()
             if collect != None:
-                userfollower = len(user.follower)
-                userfollowing = len(user.following)
+                userfollower = len(collect.follower)
+                userfollowing = len(collect.following)
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'
@@ -74,5 +75,6 @@ class MainPage(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
 ('/photocomment',photocomment),
 ('/search',search),
+('/newUsers',newUsers),
     ('/',MainPage),
 ], debug=True)
