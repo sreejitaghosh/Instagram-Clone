@@ -113,21 +113,22 @@ class newUsers(blobstore_handlers.BlobstoreUploadHandler):
         button = self.request.get('submit')
 
         if button == 'Follow':
-            if collect_ff_old != None:
-                collect_ff_old.following.append(new_Email)
-                collect_ff_old.put()
-            else:
-                collect_ff_old = followerfollowing(id=old_Email)
-                collect_ff_old.following.append(new_Email)
-                collect_ff_old.put()
+            if new_Email != old_Email:
+                if collect_ff_old != None:
+                    collect_ff_old.following.append(new_Email)
+                    collect_ff_old.put()
+                else:
+                    collect_ff_old = followerfollowing(id=old_Email)
+                    collect_ff_old.following.append(new_Email)
+                    collect_ff_old.put()
 
-            if collect_ff_new != None:
-                collect_ff_new.follower.append(user.email())
-                collect_ff_new.put()
-            else:
-                collect_ff_new = followerfollowing(id=new_Email)
-                collect_ff_new.follower.append(user.email())
-                collect_ff_new.put()
+                if collect_ff_new != None:
+                    collect_ff_new.follower.append(user.email())
+                    collect_ff_new.put()
+                else:
+                    collect_ff_new = followerfollowing(id=new_Email)
+                    collect_ff_new.follower.append(user.email())
+                    collect_ff_new.put()
             self.redirect('/newUsers?email_address='+new_Email)
 
         elif button == 'Unfollow':
