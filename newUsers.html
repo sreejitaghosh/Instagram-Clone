@@ -26,46 +26,57 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="/">INSTAGRAM</a>
         </div>
-      <ul class="nav navbar-nav">
-      {% if user %}
-        <li class="active"><a href="/">Home</a></li>
-        <li><a href="/photocomment">+ Create Post</a></li>
-        <form class="navbar-form navbar-right" method="" action="/search">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" name="search">
-            <div class="input-group-btn">
-              <button class="btn btn-default" type="submit">
-                <li class="glyphicon glyphicon-search"></li>
-              </button>
+        <ul class="nav navbar-nav">
+        {% if user %}
+          <li class="active"><a href="/">Home</a></li>
+          <li><a href="/photocomment">+ Create Post</a></li>
+          <form class="navbar-form navbar-right" method="" action="/search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search" name="search">
+              <div class="input-group-btn">
+                <button class="btn btn-default" type="submit">
+                  <li class="glyphicon glyphicon-search"></li>
+                </button>
+              </div>
             </div>
-          </div>
-        </form>
-        <li><a href="/follower"><b><u>{{ userfollower }}</u></b> Follower</a></li>
-        <li><a href="/following"><b><u>{{ userfollowing }}</u></b> Following</a></li>
-      {% endif %}
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="{{ url }}"><span class="glyphicon glyphicon-log-in"></span> {{ url_string }}</a></li>
-      </ul>
+          </form>
+          <li><a href="/UserTimeline">Timeline</a></li>
+          <li><a href="/follower"><b><u>{{ userfollower1 }}</u></b> Follower</a></li>
+          <li><a href="/following"><b><u>{{ userfollowing1 }}</u></b> Following</a></li>
+        {% endif %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ url }}"><span class="glyphicon glyphicon-log-in"></span> {{ url_string }}</a></li>
+        </ul>
       </div>
     </nav>
     <div class="container">
       {% if user %}
-      <p>USER: {{ welcome }} {{ user.email() }}</p>
-      <hr>
-      <p> Other User: {{ newEmail }}
-        <li><a href="/follower"><b><u>{{ userfollower }}</u></b> Follower</a></li>
-        <li><a href="/following"><b><u>{{ userfollowing }}</u></b> Following</a></li>
-        {% if followDecission == 'False' %}
-          <form action='/newUsers?email_address={{ newEmail }}' method='post'>
-            <input type="submit" name="submit" value="Follow">
-          </form>
-        {% elif followDecission == 'True' %}
-            <form action='/newUsers?email_address={{ newEmail }}' method='post'>
-            <input type="submit" name="submit" value="Unfollow">
-            </form>
-        {% endif %}
-        {% for j in range(0,i) %}
+        <p>USER: {{ welcome }} {{ user.email() }}</p>
+        <hr>
+        <table>
+          <tr>
+            <td>Other User: {{ newEmail }}</td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td><a href="/follower?email_address={{ newEmail }}">Follower (<b><u>{{ userfollower }}</u></b>)</a></td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td><a href="/following?email_address={{ newEmail }}">Following (<b><u>{{ userfollowing }}</u></b>)</a></td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td>
+              {% if followDecission == 'False' %}
+                <form action='/newUsers?email_address={{ newEmail }}' method='post'>
+                  <input type="submit" name="submit" value="Follow">
+                </form>
+              {% elif followDecission == 'True' %}
+                  <form action='/newUsers?email_address={{ newEmail }}' method='post'>
+                  <input type="submit" name="submit" value="Unfollow">
+                  </form>
+              {% endif %}
+            </td>
+          </tr>
+        </table>
+        <br>
+        {% for j in range(0,length) %}
           <img src="{{ collection[j] }}" style="width:200px;height:300px;">
           <br>
           Caption (if available) : {{ Caption[j] }}

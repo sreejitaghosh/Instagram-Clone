@@ -19,10 +19,9 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 class photocomment(blobstore_handlers.BlobstoreUploadHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
-
         url_string = ''
         url = ''
-
+        collection_key = []
         user = users.get_current_user()
 
         if user:
@@ -45,7 +44,6 @@ class photocomment(blobstore_handlers.BlobstoreUploadHandler):
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'
-            collection_key = []
             self.redirect('/')
 
         template_values = {

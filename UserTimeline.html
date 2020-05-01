@@ -1,0 +1,87 @@
+<html>
+ <head>
+   <title>INSTAGRAM</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+ </head>
+ <style>
+ .navbar{
+   background: #B46088;
+   color: white;
+ }
+ .navbar a{
+   color: white;
+ }
+ .navbar a:hover{
+   background: #42376A !important;
+ }
+ .table{
+   border:1px solid black !important;
+   padding:10px !important;
+ }
+ </style>
+  <body>
+    <center>
+      <nav class="navbar">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/">INSTAGRAM</a>
+          </div>
+        <ul class="nav navbar-nav">
+          {% if user %}
+            <li class="active"><a href="/">Home</a></li>
+          {% endif %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ url }}"><span class="glyphicon glyphicon-log-in"></span> {{ url_string }}</a></li>
+        </ul>
+      </div>
+      </nav>
+      <div class="container">
+        {% if user %}
+          <p>Now showing timeline for user: {{ user.email() }}</p>
+        {% else %}
+          <p>Welcome to the application </p>
+        {% endif %}
+        <br>
+        <center>
+          <table class="table">
+            {% for i in range(0,length) %}
+              <tr>
+                <td colspan="2">
+                  <center>
+                    <img src="{{ Displaying_Image[i] }}" style="max-width:500px;max-height:350px;">
+                  </center>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <center>
+                    Email-Id : {{ Displaying_Username[i] }}
+                  </center>
+                </td>
+                <td>
+                  <center>
+                    {% if Displaying_Caption[i] != "" %}
+                      Post Caption : {{ Displaying_Caption[i] }}
+                    {% else %}
+                      Post Caption : NA
+                    {% endif %}
+                  </center>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <br><br>
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        </center>
+      </div>
+    </center>
+  </body>
+</html>

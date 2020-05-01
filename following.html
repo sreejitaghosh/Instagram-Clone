@@ -28,21 +28,19 @@
         </div>
       <ul class="nav navbar-nav">
         {% if user %}
-          <li class="active"><a href="/">Home</a></li>
-          <li><a href="/photocomment">+ Create Post</a></li>
-          <form class="navbar-form navbar-right" action="/search" method='post'>
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" name="search">
-            <div class="input-group-btn">
-              <button class="btn btn-default" type="submit">
-                <li class="glyphicon glyphicon-search"></li>
-              </button>
-            </div>
+        <li class="active"><a href="/">Home</a></li>
+        <li><a href="/photocomment">+ Create Post</a></li>
+        <form class="navbar-form navbar-right" action="/search" method='post'>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search" name="search">
+          <div class="input-group-btn">
+            <button class="btn btn-default" type="submit">
+              <li class="glyphicon glyphicon-search"></li>
+            </button>
           </div>
-          </form>
-          <li><a href="/UserTimeline">Timeline</a></li>
-          <li><a href="/follower"><b><u>{{ userfollower }}</u></b> Follower</a></li>
-          <li><a href="/following"><b><u>{{ userfollowing }}</u></b> Following</a></li>
+        </div>
+        </form>
+        <li><a href="#">Timeline</a></li>
         {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -53,12 +51,10 @@
     <div class="container">
       {% if user %}
       <p>USER: {{ welcome }} {{ user.email() }}</p>
-      {% for j in range(0,i) %}
-        <img src="{{ collection[j] }}" style="width:200px;height:300px;">
-        <br>
-        Caption (if available) : {{ Caption[j] }}
-        <hr>
-      {% endfor%}
+      {% if newfollowing.following %}
+          <a href="/following?newfollowing={{ i }}">{{ i }}</a>
+          <br>
+      {% endif %}
       {% else %}
       <p>Welcome to the application </p>
       {% endif %}
