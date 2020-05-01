@@ -39,8 +39,11 @@ class following(webapp2.RequestHandler):
                 welcome = 'Welcome to the application'
                 myuser.put()
             collect = ndb.Key('followerfollowing',email).get()
-            if collect.following != None:
-                newfollowing = collect.following
+            if collect != None:
+                if collect.following != None:
+                    newfollowing = collect.following
+                else:
+                    newfollowing = []
             else:
                 newfollowing = []
         else:
