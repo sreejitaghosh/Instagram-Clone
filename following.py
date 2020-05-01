@@ -22,11 +22,15 @@ class following(webapp2.RequestHandler):
         url = ''
         userfollower = 0
         userfollowing = 0
+        newfollowing = ""
         user = users.get_current_user()
         if user:
+            email = self.request.get('email_address')
+            if email == "":
+                email = user.email()
             url = users.create_logout_url(self.request.uri)
             url_string = 'logout'
-            myuser_details = ndb.Key('MyUser', user.email())
+            myuser_details = ndb.Key('MyUser',user.email())
             myuser = myuser_details.get()
             if myuser == None:
                 myuser = MyUser(id=user.email())
@@ -34,10 +38,11 @@ class following(webapp2.RequestHandler):
                 myuser.userId = user.nickname()
                 welcome = 'Welcome to the application'
                 myuser.put()
-            collect = ndb.Key('followerfollowing',user.nickname()).get()
-            newfollowing = collect.following
-            if collect != None:
-                collect.following.append(newfollowing)
+            collect = ndb.Key('followerfollowing',email).get()
+            if collect.following != None:
+                newfollowing = collect.following
+            else:
+                newfollowing = []
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'

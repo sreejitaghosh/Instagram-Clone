@@ -22,11 +22,15 @@ class follower(webapp2.RequestHandler):
         url = ''
         userfollower = 0
         userfollowing = 0
+        newfollowing = ""
         user = users.get_current_user()
         if user:
+            email = self.request.get('email_address')
+            if email == "":
+                email = user.email()
             url = users.create_logout_url(self.request.uri)
             url_string = 'logout'
-            myuser_details = ndb.Key('MyUser', user.email())
+            myuser_details = ndb.Key('MyUser',user.email())
             myuser = myuser_details.get()
             if myuser == None:
                 myuser = MyUser(id=user.email())
@@ -34,10 +38,11 @@ class follower(webapp2.RequestHandler):
                 myuser.userId = user.nickname()
                 welcome = 'Welcome to the application'
                 myuser.put()
-            email_address = self.request.get('email_address')
-            collect = ndb.Key('followerfollowing',email_address).get()
-            if collect != None:
-                length = len(collect.follower)
+            collect = ndb.Key('followerfollowing',email).get()
+            if collect.following != None:
+                newfollower = collect.follower
+            else:
+                newfollower = []
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'
@@ -47,8 +52,9 @@ class follower(webapp2.RequestHandler):
              'url' : url,
              'url_string' : url_string,
              'user' : user,
-             'length' : length,
-
+             'userfollower': userfollower,
+             'userfollowing': userfollowing,
+             'newfollower': newfollower,
         }
 
         template = JINJA_ENVIRONMENT.get_template('follower.html')

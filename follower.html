@@ -26,37 +26,37 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="/">INSTAGRAM</a>
         </div>
-      <ul class="nav navbar-nav">
-        {% if user %}
-        <li class="active"><a href="/">Home</a></li>
-        <li><a href="/photocomment">+ Create Post</a></li>
-        <form class="navbar-form navbar-right" action="/search" method='post'>
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search" name="search">
-          <div class="input-group-btn">
-            <button class="btn btn-default" type="submit">
-              <li class="glyphicon glyphicon-search"></li>
-            </button>
+        <ul class="nav navbar-nav">
+          {% if user %}
+          <li class="active"><a href="/">Home</a></li>
+          <form class="navbar-form navbar-right" action="/search" method='post'>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" name="search">
+            <div class="input-group-btn">
+              <button class="btn btn-default" type="submit">
+                <li class="glyphicon glyphicon-search"></li>
+              </button>
+            </div>
           </div>
-        </div>
-        </form>
-        <li><a href="#">Timeline</a></li>
-        {% endif %}
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="{{ url }}"><span class="glyphicon glyphicon-log-in"></span> {{ url_string }}</a></li>
-      </ul>
-    </div>
+          </form>
+          {% endif %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ url }}"><span class="glyphicon glyphicon-log-in"></span> {{ url_string }}</a></li>
+        </ul>
+      </div>
     </nav>
     <div class="container">
-      {% if user %}
-      <p>USER: {{ welcome }} {{ user.email() }}</p>
-          {% if newfollower.follower %}
-              <a href="/follower?email_address={{  user.email() }}"></a>
-              <br>
-          {% endif %}
+      {% if newfollower %}
+        <p>USER: {{ welcome }} {{ user.email() }}</p>
+        {% if newfollower %}
+          {% for i in newfollower %}
+            <a href="/newUsers?email_address={{ i }}">{{ i }}</a>
+            <br>
+          {% endfor %}
+        {% endif %}
       {% else %}
-      <p>Welcome to the application </p>
+        <p>No user to display.</p>
       {% endif %}
       <br>
     </div>
