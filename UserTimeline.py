@@ -86,10 +86,11 @@ class UserTimeline(webapp2.RequestHandler):
                 if length == 50:
                     i = len(temp_Caption)
                 else:
-                    i = i + 1
                     Displaying_Caption.append(temp_Caption[i])
                     Displaying_Image.append(temp_Image[i])
                     Displaying_Username.append(temp_Username[i])
+                    i = i + 1
+
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'
