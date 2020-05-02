@@ -17,14 +17,9 @@ class UserTimeline(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
         user = users.get_current_user()
-        All_Post_Image_URL = []
-        All_Post_Caption = []
-        Post_Data = None
         Displaying_Username = []
         Displaying_Caption = []
         Displaying_Image = []
-        length_Of_Post = []
-        max_Post = 0
         length = 0
         if user:
             url = users.create_logout_url(self.request.uri)
@@ -46,15 +41,27 @@ class UserTimeline(webapp2.RequestHandler):
                         email_address.append(followerfollowing_data.following[i])
                         i = i + 1
             i = 0
+            max_Post = 0
+            All_Post_Caption = []
+            All_Post_Image_URL = []
+            Post = None
+            Post_Caption = []
+            Post_Image_URL = []
+            length_Of_Post = []
             while i < len(email_address):
-                Post_Data = ndb.Key('post',email_address[i]).get()
-                if Post_Data != None:
-                    All_Post_Caption.append(Post_Data.caption)
-                    All_Post_Image_URL.append(Post_Data.photo_url)
-                else:
-                    All_Post_Caption.append([])
-                    All_Post_Image_URL.append([])
+                Post = ndb.Key('post',email_address[i]).get()
+                for j in range(len(Post.caption)-1,-1,-1):
+                    if Post != None:
+                        Post_Caption.append(Post.caption[j])
+                        Post_Image_URL.append(Post.photo_url[j])
+                    else:
+                        Post_Caption.append([])
+                        Post_Image_URL.append([])
+                All_Post_Caption.append(Post_Caption)
+                All_Post_Image_URL.append(Post_Image_URL)
                 length_Of_Post.append(len(All_Post_Caption[i]))
+                Post_Caption = []
+                Post_Image_URL = []
                 i = i + 1
             max_Post = max(length_Of_Post)
             i = 0
@@ -73,15 +80,16 @@ class UserTimeline(webapp2.RequestHandler):
             Displaying_Image = []
             temp_Username = Displaying_Username
             Displaying_Username = []
-            i = len(temp_Caption) - 1
-            while i != -1:
-                Displaying_Caption.append(temp_Caption[i])
-                Displaying_Image.append(temp_Image[i])
-                Displaying_Username.append(temp_Username[i])
-                i = i - 1
-            length = len(Displaying_Image)
-            if length > 50:
-                length = 50
+            i = 0
+            while i < len(temp_Caption):
+                length = length + 1
+                if length == 50:
+                    i = len(temp_Caption)
+                else:
+                    i = i + 1
+                    Displaying_Caption.append(temp_Caption[i])
+                    Displaying_Image.append(temp_Image[i])
+                    Displaying_Username.append(temp_Username[i])
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'

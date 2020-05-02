@@ -32,7 +32,7 @@ class newUsers(blobstore_handlers.BlobstoreUploadHandler):
         newEmail = self.request.get('email_address')
         newUsers = ndb.Key('MyUser',newEmail).get()
         user = users.get_current_user()
-        followDecission = ""
+        followDecission = "False"
         if user:
             url = users.create_logout_url(self.request.uri)
             url_string = 'logout'
@@ -47,7 +47,6 @@ class newUsers(blobstore_handlers.BlobstoreUploadHandler):
 
             collection_key = ndb.Key('post',newUsers.userId)
             collection_key = collection_key.get()
-            newUserFFList = ndb.Key('followerfollowing',newEmail).get()
             if collection_key != None:
                 i = len(collection_key.photo_url) - 1
                 while i > -1:
@@ -55,25 +54,17 @@ class newUsers(blobstore_handlers.BlobstoreUploadHandler):
                     Caption.append(collection_key.caption[i])
                     i = i - 1
                 length = len(collection)
-            newUsersId =  newUsers.email_address
-            collect = ndb.Key('followerfollowing',newUsersId).get()
+            newUserFFList = ndb.Key('followerfollowing',newEmail).get()
+            if newUserFFList != None:
+                userfollower = len(newUserFFList.follower)
+                userfollowing = len(newUserFFList.following)
+            oldUsersEmail =  myuser.email_address
+            collect = ndb.Key('followerfollowing',oldUsersEmail).get()
             if collect != None:
-                userfollower = len(collect.follower)
-                userfollowing = len(collect.following)
-                for i in collect.follower:
-                    if i == user.email():
+                for i in collect.following:
+                    if i == newEmail:
                         followDecission = 'True'
                         break
-                    else:
-                        followDecission = 'False'
-            else:
-                userfollower = 0
-                userfollowing = 0
-                followDecission = 'False'
-            oldUserFFList = ndb.Key('followerfollowing',myuser.email_address).get()
-            if oldUserFFList != None:
-                userfollower1 = len(oldUserFFList.follower)
-                userfollowing1 = len(oldUserFFList.following)
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'

@@ -23,12 +23,14 @@ class photocomment(blobstore_handlers.BlobstoreUploadHandler):
         url = ''
         collection_key = []
         user = users.get_current_user()
+        upload_url = ""
 
         if user:
             url = users.create_logout_url(self.request.uri)
             url_string = 'logout'
             myuser_details = ndb.Key('MyUser', user.email())
             myuser = myuser_details.get()
+            upload_url = blobstore.create_upload_url('/photocomment')
             if myuser == None:
                 myuser = MyUser(id=user.email())
                 myuser.email_address = user.email()
@@ -36,10 +38,10 @@ class photocomment(blobstore_handlers.BlobstoreUploadHandler):
                 welcome = 'Welcome to the application'
                 myuser.put()
 
-            collection_key = ndb.Key('post', user.nickname())
+            collection_key = ndb.Key('post', user.email())
             collection_key = collection_key.get()
             if collection_key == None:
-                collection_key = post(id=user.nickname())
+                collection_key = post(id=user.email())
                 collection_key.put()
         else:
             url = users.create_login_url(self.request.uri)
@@ -51,7 +53,7 @@ class photocomment(blobstore_handlers.BlobstoreUploadHandler):
              'url_string' : url_string,
              'user' : user,
              'collection_key' : collection_key,
-             'upload_url' : blobstore.create_upload_url('/photocomment'),
+             'upload_url' : upload_url,
         }
 
         template = JINJA_ENVIRONMENT.get_template('photocomment.html')
@@ -81,11 +83,11 @@ class photocomment(blobstore_handlers.BlobstoreUploadHandler):
             blobinfo = blobstore.BlobInfo(upload.key())
             image_url = get_serving_url(blobinfo)
             caption = self.request.get('caption')
-            collection_key = ndb.Key('post',user.nickname())
+            collection_key = ndb.Key('post',user.email())
             collection_key = collection_key.get()
 
             if collection_key == None:
-                collection_key = post(id = user.nickname())
+                collection_key = post(id = user.email())
                 collection_key.photo_url.append(image_url)
                 collection_key.email_address = user.email()
                 collection_key.caption.append(caption)
@@ -107,7 +109,6 @@ class photocomment(blobstore_handlers.BlobstoreUploadHandler):
              'url_string' : url_string,
              'user' : user,
              'collection_key' : collection_key,
-             'upload_url' : blobstore.create_upload_url('/photocomment'),
         }
 
         template = JINJA_ENVIRONMENT.get_template('photocomment.html')

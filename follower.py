@@ -22,7 +22,7 @@ class follower(webapp2.RequestHandler):
         url = ''
         userfollower = 0
         userfollowing = 0
-        newfollowing = ""
+        newfollower = ""
         user = users.get_current_user()
         if user:
             email = self.request.get('email_address')

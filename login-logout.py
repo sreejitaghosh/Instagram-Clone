@@ -44,7 +44,7 @@ class MainPage(webapp2.RequestHandler):
                 welcome = 'Welcome to the application'
                 myuser.put()
 
-            collection_key = ndb.Key('post',user.nickname())
+            collection_key = ndb.Key('post',user.email())
             collection_key = collection_key.get()
             if collection_key != None:
                 i = len(collection_key.photo_url) - 1
@@ -53,7 +53,7 @@ class MainPage(webapp2.RequestHandler):
                     Caption.append(collection_key.caption[i])
                     i = i - 1
                 length = len(collection)
-            collect = ndb.Key('followerfollowing',user.nickname()).get()
+            collect = ndb.Key('followerfollowing',user.email()).get()
             if collect != None:
                 userfollower = len(collect.follower)
                 userfollowing = len(collect.following)
